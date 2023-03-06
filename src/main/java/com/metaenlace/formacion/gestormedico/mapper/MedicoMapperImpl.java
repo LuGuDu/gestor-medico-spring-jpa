@@ -60,6 +60,12 @@ public class MedicoMapperImpl implements MedicoMapper{
         if ( medicoDTO == null ) {
             return null;
         }
+        if (medicoDTO.getCitasId() == null){
+            medicoDTO.setCitasId(new ArrayList<>());
+        }
+        if (medicoDTO.getPacientesId() == null){
+            medicoDTO.setPacientesId(new ArrayList<>());
+        }
 
         Medico medico = new Medico();
 

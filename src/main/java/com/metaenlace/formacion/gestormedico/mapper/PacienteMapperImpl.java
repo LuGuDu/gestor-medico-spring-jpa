@@ -65,6 +65,12 @@ public class PacienteMapperImpl implements PacienteMapper{
         if ( pacienteDTO == null ) {
             return null;
         }
+        if (pacienteDTO.getCitasId() == null){
+            pacienteDTO.setCitasId(new ArrayList<>());
+        }
+        if (pacienteDTO.getMedicosId() == null){
+            pacienteDTO.setMedicosId(new ArrayList<>());
+        }
 
         Paciente paciente = new Paciente();
 
