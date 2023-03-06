@@ -1,5 +1,6 @@
 package com.metaenlace.formacion.gestormedico.services;
 
+import com.metaenlace.formacion.gestormedico.exceptions.BadFormatException;
 import com.metaenlace.formacion.gestormedico.mapper.MedicoMapper;
 import com.metaenlace.formacion.gestormedico.dto.MedicoDTO;
 import com.metaenlace.formacion.gestormedico.entities.Cita;
@@ -54,6 +55,12 @@ public class MedicoService {
 
     public void crear(MedicoDTO medicoDTO){
         try {
+            /***
+             * comprobar contraseña segura
+             */
+            if(medicoDTO.getNumColegiado().matches("\\d{9}")){
+                throw new BadFormatException("El numero de colegiado no es valido");
+            }
             Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO);
             medicoRepo.save(medico);
         } catch (Exception e){

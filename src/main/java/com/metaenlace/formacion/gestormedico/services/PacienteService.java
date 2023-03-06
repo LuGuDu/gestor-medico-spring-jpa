@@ -1,6 +1,7 @@
 package com.metaenlace.formacion.gestormedico.services;
 
 import com.metaenlace.formacion.gestormedico.dto.PacienteDTO;
+import com.metaenlace.formacion.gestormedico.exceptions.BadFormatException;
 import com.metaenlace.formacion.gestormedico.exceptions.NotFoundException;
 import com.metaenlace.formacion.gestormedico.mapper.PacienteMapper;
 import com.metaenlace.formacion.gestormedico.repositories.PacienteRepository;
@@ -48,6 +49,21 @@ public class PacienteService {
     public void crear(PacienteDTO pacienteDTO){
 
         try {
+            /***
+             * comprobar:
+             * contraseña segura y cifrar despues
+             */
+            if(!pacienteDTO.getNumTarjeta().matches("[0-9]+")){
+                throw new BadFormatException("El numero de tarjeta no es valido");
+            }
+            if(pacienteDTO.getNSS().matches("\\d{9}")){
+                throw new BadFormatException("El nss no es valido");
+            }
+            if(pacienteDTO.getTelefono().matches("\\d{9}")){
+                throw new BadFormatException("El telefono no es valido");
+            }
+
+
             Paciente paciente = PacienteMapper.INSTANCE.pacienteDTOToPaciente(pacienteDTO);
             pacienteRepo.save(paciente);
         } catch (Exception e){
