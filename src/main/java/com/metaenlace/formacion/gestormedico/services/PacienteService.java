@@ -56,13 +56,12 @@ public class PacienteService {
             if(!pacienteDTO.getNumTarjeta().matches("[0-9]+")){
                 throw new BadFormatException("El numero de tarjeta no es valido");
             }
-            if(pacienteDTO.getNSS().matches("\\d{9}")){
+            if(!pacienteDTO.getNSS().matches("\\d{9}")){
                 throw new BadFormatException("El nss no es valido");
             }
-            if(pacienteDTO.getTelefono().matches("\\d{9}")){
+            if(!pacienteDTO.getTelefono().matches("\\d{9}")){
                 throw new BadFormatException("El telefono no es valido");
             }
-
 
             Paciente paciente = PacienteMapper.INSTANCE.pacienteDTOToPaciente(pacienteDTO);
             pacienteRepo.save(paciente);

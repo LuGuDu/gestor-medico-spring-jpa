@@ -58,8 +58,8 @@ public class MedicoService {
             /***
              * comprobar contraseña segura
              */
-            if(medicoDTO.getNumColegiado().matches("\\d{9}")){
-                throw new BadFormatException("El numero de colegiado no es valido");
+            if(!medicoDTO.getNumColegiado().matches("\\d{9}")){
+                throw new BadFormatException("El numero de colegiado no es valido. Debe tener 9 digitos.");
             }
             Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO);
             medicoRepo.save(medico);
@@ -70,6 +70,9 @@ public class MedicoService {
 
     public void modificar(MedicoDTO medicoDTO){
         try {
+            if(!medicoDTO.getNumColegiado().matches("\\d{9}")){
+                throw new BadFormatException("El numero de colegiado no es valido. Debe tener 9 digitos.");
+            }
             Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO);
             medicoRepo.save(medico);
         } catch (Exception e){
