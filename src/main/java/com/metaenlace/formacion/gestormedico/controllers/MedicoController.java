@@ -1,17 +1,15 @@
 package com.metaenlace.formacion.gestormedico.controllers;
 
 import com.metaenlace.formacion.gestormedico.dto.MedicoDTO;
-import com.metaenlace.formacion.gestormedico.entities.Medico;
 import com.metaenlace.formacion.gestormedico.services.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
-@Controller
+@RestController
 @RequestMapping("/medico")
 public class MedicoController {
 
@@ -36,9 +34,9 @@ public class MedicoController {
         return ResponseEntity.ok("200");
     }
 
-    @PutMapping
-    ResponseEntity modificarMedico(@RequestBody MedicoDTO medico){
-        medicoService.modificar(medico);
+    @PutMapping(path = "/{id}")
+    ResponseEntity modificarMedico(@RequestBody MedicoDTO medico, @PathVariable Long id){
+        medicoService.modificar(id, medico);
         return ResponseEntity.ok("200");
     }
 

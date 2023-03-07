@@ -3,9 +3,7 @@ package com.metaenlace.formacion.gestormedico.services;
 import com.metaenlace.formacion.gestormedico.exceptions.BadFormatException;
 import com.metaenlace.formacion.gestormedico.mapper.MedicoMapper;
 import com.metaenlace.formacion.gestormedico.dto.MedicoDTO;
-import com.metaenlace.formacion.gestormedico.entities.Cita;
 import com.metaenlace.formacion.gestormedico.entities.Medico;
-import com.metaenlace.formacion.gestormedico.entities.Paciente;
 import com.metaenlace.formacion.gestormedico.exceptions.NotFoundException;
 import com.metaenlace.formacion.gestormedico.repositories.CitaRepository;
 import com.metaenlace.formacion.gestormedico.repositories.MedicoRepository;
@@ -49,8 +47,7 @@ public class MedicoService {
                 throw new NotFoundException("No se ha encontrado al medico");
             }
             Medico medico = optMedico.get();
-            MedicoDTO medicoDTO = MedicoMapper.INSTANCE.medicoToMedicoDTO(medico);
-            return medicoDTO;
+            return MedicoMapper.INSTANCE.medicoToMedicoDTO(medico);
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
@@ -74,8 +71,12 @@ public class MedicoService {
             }
 
             if (!PASSWORD_PATTERN.matcher(medicoDTO.getClave()).matches()) {
-                throw new BadFormatException("La clave no es segura. Debe cumplir los siguientes requisitos:" +
-                        "\n min. 1 numero. \n min. 1 minuscula. \n min. 1 mayuscula. \n min. 8 caracteres.");
+                throw new BadFormatException("""
+                        La clave no es segura. Debe cumplir los siguientes requisitos:
+                         min. 1 numero.\s
+                         min. 1 minuscula.\s
+                         min. 1 mayuscula.\s
+                         min. 8 caracteres.""");
             }
 
             Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO);
@@ -85,16 +86,21 @@ public class MedicoService {
         }
     }
 
-    public void modificar(MedicoDTO medicoDTO){
+    public void modificar(Long id, MedicoDTO medicoDTO){
         try {
             if(!medicoDTO.getNumColegiado().matches("\\d{9}")){
                 throw new BadFormatException("El numero de colegiado no es valido. Debe tener 9 digitos.");
             }
             if (!PASSWORD_PATTERN.matcher(medicoDTO.getClave()).matches()) {
-                throw new BadFormatException("La clave no es segura. Debe cumplir los siguientes requisitos:" +
-                        "\n min. 1 numero. \n min. 1 minuscula. \n min. 1 mayuscula. \n min. 8 caracteres.");
+                throw new BadFormatException("""
+                        La clave no es segura. Debe cumplir los siguientes requisitos:
+                         min. 1 numero.\s
+                         min. 1 minuscula.\s
+                         min. 1 mayuscula.\s
+                         min. 8 caracteres.""");
             }
             Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO);
+            medico.setId(id);
             medicoRepo.save(medico);
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());

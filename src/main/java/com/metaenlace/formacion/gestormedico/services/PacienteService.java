@@ -41,8 +41,7 @@ public class PacienteService {
                 throw new NotFoundException("No se ha encontrado al paciente");
             }
             Paciente paciente = optPaciente.get();
-            PacienteDTO pacienteDTO = PacienteMapper.INSTANCE.pacienteToPacienteDTO(paciente);
-            return pacienteDTO;
+            return PacienteMapper.INSTANCE.pacienteToPacienteDTO(paciente);
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
@@ -72,8 +71,12 @@ public class PacienteService {
                 throw new BadFormatException("El telefono no es valido");
             }
             if (!PASSWORD_PATTERN.matcher(pacienteDTO.getClave()).matches()) {
-                throw new BadFormatException("La clave no es segura. Debe cumplir los siguientes requisitos:" +
-                        "\n min. 1 numero. \n min. 1 minuscula. \n min. 1 mayuscula. \n min. 8 caracteres.");
+                throw new BadFormatException("""
+                        La clave no es segura. Debe cumplir los siguientes requisitos:
+                         min. 1 numero.\s
+                         min. 1 minuscula.\s
+                         min. 1 mayuscula.\s
+                         min. 8 caracteres.""");
             }
 
             Paciente paciente = PacienteMapper.INSTANCE.pacienteDTOToPaciente(pacienteDTO);
@@ -83,9 +86,27 @@ public class PacienteService {
         }
     }
 
-    public void modificar(PacienteDTO pacienteDTO){
+    public void modificar(Long id, PacienteDTO pacienteDTO){
         try {
+            if(!pacienteDTO.getNumTarjeta().matches("[0-9]+")){
+                throw new BadFormatException("El numero de tarjeta no es valido");
+            }
+            if(!pacienteDTO.getNSS().matches("\\d{9}")){
+                throw new BadFormatException("El nss no es valido");
+            }
+            if(!pacienteDTO.getTelefono().matches("\\d{9}")){
+                throw new BadFormatException("El telefono no es valido");
+            }
+            if (!PASSWORD_PATTERN.matcher(pacienteDTO.getClave()).matches()) {
+                throw new BadFormatException("""
+                        La clave no es segura. Debe cumplir los siguientes requisitos:
+                         min. 1 numero.\s
+                         min. 1 minuscula.\s
+                         min. 1 mayuscula.\s
+                         min. 8 caracteres.""");
+            }
             Paciente paciente = PacienteMapper.INSTANCE.pacienteDTOToPaciente(pacienteDTO);
+            paciente.setId(id);
             pacienteRepo.save(paciente);
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());

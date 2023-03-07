@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
-@Controller
+@RestController
 @RequestMapping("/cita")
 public class CitaController {
 
@@ -37,8 +37,8 @@ public class CitaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity modificarCita(@RequestBody CitaDTO cita){
-        citaService.modificar(cita);
+    public ResponseEntity modificarCita(@RequestBody CitaDTO cita, @PathVariable Long id){
+        citaService.modificar(id, cita);
         return ResponseEntity.ok("200");
     }
 

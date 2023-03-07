@@ -1,19 +1,15 @@
 package com.metaenlace.formacion.gestormedico.controllers;
 
 import com.metaenlace.formacion.gestormedico.dto.PacienteDTO;
-import com.metaenlace.formacion.gestormedico.entities.Paciente;
-import com.metaenlace.formacion.gestormedico.repositories.PacienteRepository;
 import com.metaenlace.formacion.gestormedico.services.PacienteService;
-import oracle.ucp.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
-@Controller
+@RestController
 @RequestMapping("/paciente")
 public class PacienteController {
 
@@ -38,8 +34,9 @@ public class PacienteController {
         return ResponseEntity.ok("200");
     }
 
-    @PutMapping ResponseEntity modificarPaciente(@RequestBody PacienteDTO paciente){
-        pacienteService.modificar(paciente);
+    @PutMapping(path = "/{id}")
+    ResponseEntity modificarPaciente(@RequestBody PacienteDTO paciente, @PathVariable Long id){
+        pacienteService.modificar(id, paciente);
         return ResponseEntity.ok("200");
     }
 

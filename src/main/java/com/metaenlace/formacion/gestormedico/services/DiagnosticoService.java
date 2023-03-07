@@ -31,9 +31,7 @@ public class DiagnosticoService {
                 throw new NotFoundException("No se ha encontrado el diagnostico");
             }
             Diagnostico diagnostico = optDiag.get();
-            DiagnosticoDTO diagnosticoDTO = DiagnosticoMapper.INSTANCE.diagnosticoToDiagnosticoDTO(diagnostico);
-
-            return diagnosticoDTO;
+            return DiagnosticoMapper.INSTANCE.diagnosticoToDiagnosticoDTO(diagnostico);
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
@@ -63,7 +61,7 @@ public class DiagnosticoService {
         }
     }
 
-    public void modificar(DiagnosticoDTO diagDTO){
+    public void modificar(Long id, DiagnosticoDTO diagDTO){
         try {
             Optional<Cita> optCita = citaRepository.findById(diagDTO.getCitaId());
             if (optCita.isEmpty()) {
@@ -71,6 +69,7 @@ public class DiagnosticoService {
             }
             Diagnostico diag = DiagnosticoMapper.INSTANCE.diagnosticoDTOToDiagnostico(diagDTO);
             diag.setCita(optCita.get());
+            diag.setId(id);
             diagnosticoRepo.save(diag);
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
