@@ -13,10 +13,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class PacienteService {
 
+    private static final String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
     @Autowired
     private PacienteRepository pacienteRepo;
 
@@ -52,6 +55,15 @@ public class PacienteService {
             /***
              * comprobar:
              * contraseña segura y cifrar despues
+             * ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$
+             *
+             * ^               # start of the string
+             * (?=.*\d)        # min 1 numero
+             * (?=.*[a-z])     # min 1 minuscula
+             * (?=.*[A-Z])     # min 1 mayuscula
+             * .{8,}          # min 8 caracteres
+             * $               # end of the string
+             *
              */
             if(!pacienteDTO.getNumTarjeta().matches("[0-9]+")){
                 throw new BadFormatException("El numero de tarjeta no es valido");
@@ -61,6 +73,10 @@ public class PacienteService {
             }
             if(!pacienteDTO.getTelefono().matches("\\d{9}")){
                 throw new BadFormatException("El telefono no es valido");
+            }
+            if (!PASSWORD_PATTERN.matcher(pacienteDTO.getClave()).matches()) {
+                throw new BadFormatException("La clave no es segura. Debe cumplir los siguientes requisitos:" +
+                        "\n min. 1 numero. \n min. 1 minuscula. \n min. 1 mayuscula. \n min. 8 caracteres.");
             }
 
             Paciente paciente = PacienteMapper.INSTANCE.pacienteDTOToPaciente(pacienteDTO);

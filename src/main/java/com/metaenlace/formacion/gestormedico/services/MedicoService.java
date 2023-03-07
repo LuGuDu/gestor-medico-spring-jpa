@@ -17,9 +17,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class MedicoService {
+
+    private static final String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
     @Autowired
     private MedicoRepository medicoRepo;
@@ -61,6 +65,12 @@ public class MedicoService {
             if(!medicoDTO.getNumColegiado().matches("\\d{9}")){
                 throw new BadFormatException("El numero de colegiado no es valido. Debe tener 9 digitos.");
             }
+
+            if (!PASSWORD_PATTERN.matcher(medicoDTO.getClave()).matches()) {
+                throw new BadFormatException("La clave no es segura. Debe cumplir los siguientes requisitos:" +
+                        "\n min. 1 numero. \n min. 1 minuscula. \n min. 1 mayuscula. \n min. 8 caracteres.");
+            }
+
             Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO);
             medicoRepo.save(medico);
         } catch (Exception e){
@@ -72,6 +82,10 @@ public class MedicoService {
         try {
             if(!medicoDTO.getNumColegiado().matches("\\d{9}")){
                 throw new BadFormatException("El numero de colegiado no es valido. Debe tener 9 digitos.");
+            }
+            if (!PASSWORD_PATTERN.matcher(medicoDTO.getClave()).matches()) {
+                throw new BadFormatException("La clave no es segura. Debe cumplir los siguientes requisitos:" +
+                        "\n min. 1 numero. \n min. 1 minuscula. \n min. 1 mayuscula. \n min. 8 caracteres.");
             }
             Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO);
             medicoRepo.save(medico);
