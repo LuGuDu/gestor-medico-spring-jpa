@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MedicoRepository extends CrudRepository<Medico, Long> {
-
+    Medico findByUsuario(String usuario);
 }
