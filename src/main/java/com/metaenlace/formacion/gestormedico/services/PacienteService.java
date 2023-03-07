@@ -24,7 +24,6 @@ public class PacienteService {
 
     /***
      * REGEX: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$
-     *
      * ^               # start of the string
      * (?=.*\d)        # min 1 numero
      * (?=.*[a-z])     # min 1 minuscula
@@ -100,17 +99,13 @@ public class PacienteService {
             if(!pacienteDTO.getMedicosId().isEmpty()){
                 for (Long id : pacienteDTO.getMedicosId()) {
                     Optional<Medico> optMedico= medicoRepo.findById(id);
-                    if(optMedico.isPresent()){
-                        medicos.add(optMedico.get());
-                    }
+                    optMedico.ifPresent(medicos::add);
                 }
             }
             if(!pacienteDTO.getCitasId().isEmpty()){
                 for (Long id : pacienteDTO.getCitasId()) {
                     Optional<Cita> optCita = citaRepo.findById(id);
-                    if(optCita.isPresent()){
-                        citas.add(optCita.get());
-                    }
+                    optCita.ifPresent(citas::add);
                 }
             }
 
@@ -154,17 +149,13 @@ public class PacienteService {
             if(!pacienteDTO.getMedicosId().isEmpty()){
                 for (Long ident : pacienteDTO.getMedicosId()) {
                     Optional<Medico> optMedico= medicoRepo.findById(ident);
-                    if(optMedico.isPresent()){
-                        medicos.add(optMedico.get());
-                    }
+                    optMedico.ifPresent(medicos::add);
                 }
             }
             if(!pacienteDTO.getCitasId().isEmpty()){
                 for (Long ident : pacienteDTO.getCitasId()) {
                     Optional<Cita> optCita = citaRepo.findById(ident);
-                    if(optCita.isPresent()){
-                        citas.add(optCita.get());
-                    }
+                    optCita.ifPresent(citas::add);
                 }
             }
             Paciente paciente = PacienteMapper.INSTANCE.pacienteDTOToPaciente(pacienteDTO, medicos, citas);

@@ -1,12 +1,10 @@
 package com.metaenlace.formacion.gestormedico.controllers;
 
 import com.metaenlace.formacion.gestormedico.dto.CitaDTO;
-import com.metaenlace.formacion.gestormedico.entities.Cita;
 import com.metaenlace.formacion.gestormedico.services.CitaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

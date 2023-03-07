@@ -2,7 +2,6 @@ package com.metaenlace.formacion.gestormedico.services;
 
 import com.metaenlace.formacion.gestormedico.dto.CitaDTO;
 import com.metaenlace.formacion.gestormedico.mapper.CitaMapper;
-import com.metaenlace.formacion.gestormedico.mapper.CitaMapper;
 import com.metaenlace.formacion.gestormedico.entities.Cita;
 import com.metaenlace.formacion.gestormedico.entities.Diagnostico;
 import com.metaenlace.formacion.gestormedico.entities.Medico;

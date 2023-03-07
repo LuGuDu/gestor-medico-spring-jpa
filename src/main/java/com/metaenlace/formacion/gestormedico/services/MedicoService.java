@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -25,7 +24,6 @@ public class MedicoService {
 
     /***
      * REGEX: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$
-     *
      * ^               # start of the string
      * (?=.*\d)        # min 1 numero
      * (?=.*[a-z])     # min 1 minuscula
@@ -95,18 +93,14 @@ public class MedicoService {
             if(!medicoDTO.getPacientesId().isEmpty()){
                 for (Long id : medicoDTO.getPacientesId()) {
                     Optional<Paciente> optPaciente= pacienteRepo.findById(id);
-                    if(optPaciente.isPresent()){
-                        pacientes.add(optPaciente.get());
-                    }
+                    optPaciente.ifPresent(pacientes::add);
                 }
             }
 
             if(!medicoDTO.getCitasId().isEmpty()){
                 for (Long id : medicoDTO.getCitasId()) {
                     Optional<Cita> optCita = citaRepo.findById(id);
-                    if(optCita.isPresent()){
-                        citas.add(optCita.get());
-                    }
+                    optCita.ifPresent(citas::add);
                 }
             }
 
@@ -145,18 +139,14 @@ public class MedicoService {
             if(!medicoDTO.getPacientesId().isEmpty()){
                 for (Long ident : medicoDTO.getPacientesId()) {
                     Optional<Paciente> optPaciente= pacienteRepo.findById(ident);
-                    if(optPaciente.isPresent()){
-                        pacientes.add(optPaciente.get());
-                    }
+                    optPaciente.ifPresent(pacientes::add);
                 }
             }
 
             if(!medicoDTO.getCitasId().isEmpty()){
                 for (Long ident : medicoDTO.getCitasId()) {
                     Optional<Cita> optCita = citaRepo.findById(ident);
-                    if(optCita.isPresent()){
-                        citas.add(optCita.get());
-                    }
+                    optCita.ifPresent(citas::add);
                 }
             }
 
