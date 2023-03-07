@@ -22,6 +22,16 @@ import java.util.regex.Pattern;
 @Service
 public class MedicoService {
 
+    /***
+     * REGEX: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$
+     *
+     * ^               # start of the string
+     * (?=.*\d)        # min 1 numero
+     * (?=.*[a-z])     # min 1 minuscula
+     * (?=.*[A-Z])     # min 1 mayuscula
+     * .{8,}           # min 8 caracteres
+     * $               # end of the string
+     */
     private static final String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
@@ -59,9 +69,6 @@ public class MedicoService {
 
     public void crear(MedicoDTO medicoDTO){
         try {
-            /***
-             * comprobar contraseña segura
-             */
             if(!medicoDTO.getNumColegiado().matches("\\d{9}")){
                 throw new BadFormatException("El numero de colegiado no es valido. Debe tener 9 digitos.");
             }

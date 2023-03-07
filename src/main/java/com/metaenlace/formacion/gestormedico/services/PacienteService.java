@@ -18,6 +18,16 @@ import java.util.regex.Pattern;
 @Service
 public class PacienteService {
 
+    /***
+     * REGEX: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$
+     *
+     * ^               # start of the string
+     * (?=.*\d)        # min 1 numero
+     * (?=.*[a-z])     # min 1 minuscula
+     * (?=.*[A-Z])     # min 1 mayuscula
+     * .{8,}           # min 8 caracteres
+     * $               # end of the string
+     */
     private static final String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
     @Autowired
@@ -52,19 +62,6 @@ public class PacienteService {
     public void crear(PacienteDTO pacienteDTO){
 
         try {
-            /***
-             * comprobar:
-             * contraseña segura y cifrar despues
-             * ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$
-             *
-             * ^               # start of the string
-             * (?=.*\d)        # min 1 numero
-             * (?=.*[a-z])     # min 1 minuscula
-             * (?=.*[A-Z])     # min 1 mayuscula
-             * .{8,}          # min 8 caracteres
-             * $               # end of the string
-             *
-             */
             if(!pacienteDTO.getNumTarjeta().matches("[0-9]+")){
                 throw new BadFormatException("El numero de tarjeta no es valido");
             }
