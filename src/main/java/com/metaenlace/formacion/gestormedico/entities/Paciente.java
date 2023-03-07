@@ -1,8 +1,6 @@
 package com.metaenlace.formacion.gestormedico.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,9 +21,9 @@ public class Paciente extends Usuario {
 	@Column(name = "direccion")
 	private String direccion;
 
-	@ManyToMany(cascade = { CascadeType.ALL})
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
-			name = "paciente_medicos",
+			name = "medicos_paciente",
 			joinColumns = { @JoinColumn(name = "paciente_id")},
 			inverseJoinColumns = { @JoinColumn(name = "medico_id")}
 	)

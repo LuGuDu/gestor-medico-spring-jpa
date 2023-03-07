@@ -3,14 +3,12 @@ package com.metaenlace.formacion.gestormedico.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "usuarios")
-@Inheritance
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public abstract class Usuario {
 
 	@Id

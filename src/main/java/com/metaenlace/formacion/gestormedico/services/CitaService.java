@@ -2,7 +2,6 @@ package com.metaenlace.formacion.gestormedico.services;
 
 import com.metaenlace.formacion.gestormedico.dto.CitaDTO;
 import com.metaenlace.formacion.gestormedico.mapper.CitaMapper;
-import com.metaenlace.formacion.gestormedico.mapper.CitaMapper;
 import com.metaenlace.formacion.gestormedico.entities.Cita;
 import com.metaenlace.formacion.gestormedico.entities.Diagnostico;
 import com.metaenlace.formacion.gestormedico.entities.Medico;
@@ -73,15 +72,17 @@ public class CitaService {
             Cita cita = CitaMapper.INSTANCE.citaDTOToCita(citaDTO);
             cita.setMedico(optMedico.get());
             cita.setPaciente(optPaciente.get());
-
             citaRepository.save(cita);
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
-    public void modificar(CitaDTO citaDTO) {
+    public void modificar(Long id, CitaDTO citaDTO) {
         try {
+            Cita cita = CitaMapper.INSTANCE.citaDTOToCita(citaDTO);
+            cita.setId(id);
+
             Optional<Medico> optMedico = medicoRepository.findById(citaDTO.getMedicoId());
             if (optMedico.isEmpty()) {
                 throw new NotFoundException("No se ha encontrado al medico");
@@ -93,11 +94,12 @@ public class CitaService {
             }
 
             Optional<Diagnostico> optDiagnostico = diagnosticoRepository.findById(citaDTO.getDiagnosticoId());
+            if(optDiagnostico.isPresent()){
+                cita.setDiagnostico(optDiagnostico.get());
+            }
 
-            Cita cita = CitaMapper.INSTANCE.citaDTOToCita(citaDTO);
             cita.setMedico(optMedico.get());
             cita.setPaciente(optPaciente.get());
-            cita.setDiagnostico(optDiagnostico.get());
             citaRepository.save(cita);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
