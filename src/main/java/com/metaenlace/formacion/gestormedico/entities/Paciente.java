@@ -23,7 +23,7 @@ public class Paciente extends Usuario {
 	@Column(name = "direccion")
 	private String direccion;
 
-	@ManyToMany(cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 			name = "medicos_paciente",
 			joinColumns = { @JoinColumn(name = "paciente_id")},

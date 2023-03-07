@@ -15,7 +15,7 @@ public class Medico extends Usuario{
 	@Column(name = "numColegiado")
 	private String numColegiado;
 
-	@ManyToMany(cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 			name = "medicos_paciente",
 			joinColumns = { @JoinColumn(name = "medico_id")},
