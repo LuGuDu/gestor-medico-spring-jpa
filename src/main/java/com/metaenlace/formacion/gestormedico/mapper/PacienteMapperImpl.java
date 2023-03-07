@@ -4,12 +4,8 @@ import com.metaenlace.formacion.gestormedico.dto.PacienteDTO;
 import com.metaenlace.formacion.gestormedico.entities.Cita;
 import com.metaenlace.formacion.gestormedico.entities.Medico;
 import com.metaenlace.formacion.gestormedico.entities.Paciente;
-import com.metaenlace.formacion.gestormedico.repositories.CitaRepository;
-import com.metaenlace.formacion.gestormedico.repositories.MedicoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
@@ -19,11 +15,6 @@ import org.springframework.stereotype.Component;
 )
 @Component
 public class PacienteMapperImpl implements PacienteMapper{
-
-    @Autowired
-    private MedicoRepository medicoRepo;
-    @Autowired
-    private CitaRepository citaRepo;
 
     @Override
     public PacienteDTO pacienteToPacienteDTO(Paciente paciente){
@@ -60,16 +51,10 @@ public class PacienteMapperImpl implements PacienteMapper{
     }
 
     @Override
-    public Paciente pacienteDTOToPaciente(PacienteDTO pacienteDTO){
+    public Paciente pacienteDTOToPaciente(PacienteDTO pacienteDTO, ArrayList<Medico> medicos, ArrayList<Cita> citas){
 
         if ( pacienteDTO == null ) {
             return null;
-        }
-        if (pacienteDTO.getCitasId() == null){
-            pacienteDTO.setCitasId(new ArrayList<>());
-        }
-        if (pacienteDTO.getMedicosId() == null){
-            pacienteDTO.setMedicosId(new ArrayList<>());
         }
 
         Paciente paciente = new Paciente();
@@ -83,26 +68,6 @@ public class PacienteMapperImpl implements PacienteMapper{
         paciente.setNumTarjeta( pacienteDTO.getNumTarjeta() );
         paciente.setTelefono( pacienteDTO.getTelefono() );
         paciente.setDireccion( pacienteDTO.getDireccion() );
-
-        ArrayList<Cita> citas = new ArrayList<>();
-        ArrayList<Medico> medicos = new ArrayList<>();
-
-        if(!pacienteDTO.getMedicosId().isEmpty()){
-            for (Long id : pacienteDTO.getMedicosId()) {
-                Optional<Medico> optMedico= medicoRepo.findById(id);
-                if(optMedico.isPresent()){
-                    medicos.add(optMedico.get());
-                }
-            }
-        }
-        if(!pacienteDTO.getCitasId().isEmpty()){
-            for (Long id : pacienteDTO.getCitasId()) {
-                Optional<Cita> optCita = citaRepo.findById(id);
-                if(optCita.isPresent()){
-                    citas.add(optCita.get());
-                }
-            }
-        }
 
         paciente.setCitas(citas);
         paciente.setMedicos(medicos);

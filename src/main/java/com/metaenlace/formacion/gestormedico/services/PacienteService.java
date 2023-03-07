@@ -1,9 +1,13 @@
 package com.metaenlace.formacion.gestormedico.services;
 
 import com.metaenlace.formacion.gestormedico.dto.PacienteDTO;
+import com.metaenlace.formacion.gestormedico.entities.Cita;
+import com.metaenlace.formacion.gestormedico.entities.Medico;
 import com.metaenlace.formacion.gestormedico.exceptions.BadFormatException;
 import com.metaenlace.formacion.gestormedico.exceptions.NotFoundException;
 import com.metaenlace.formacion.gestormedico.mapper.PacienteMapper;
+import com.metaenlace.formacion.gestormedico.repositories.CitaRepository;
+import com.metaenlace.formacion.gestormedico.repositories.MedicoRepository;
 import com.metaenlace.formacion.gestormedico.repositories.PacienteRepository;
 import com.metaenlace.formacion.gestormedico.entities.Paciente;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +36,10 @@ public class PacienteService {
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
     @Autowired
     private PacienteRepository pacienteRepo;
+    @Autowired
+    private MedicoRepository medicoRepo;
+    @Autowired
+    private CitaRepository citaRepo;
 
     public PacienteDTO find(Long id){
         try {
@@ -79,7 +87,34 @@ public class PacienteService {
                          min. 8 caracteres.""");
             }
 
-            Paciente paciente = PacienteMapper.INSTANCE.pacienteDTOToPaciente(pacienteDTO);
+            ArrayList<Cita> citas = new ArrayList<>();
+            ArrayList<Medico> medicos = new ArrayList<>();
+
+            if (pacienteDTO.getCitasId() == null){
+                pacienteDTO.setCitasId(new ArrayList<>());
+            }
+            if (pacienteDTO.getMedicosId() == null){
+                pacienteDTO.setMedicosId(new ArrayList<>());
+            }
+
+            if(!pacienteDTO.getMedicosId().isEmpty()){
+                for (Long id : pacienteDTO.getMedicosId()) {
+                    Optional<Medico> optMedico= medicoRepo.findById(id);
+                    if(optMedico.isPresent()){
+                        medicos.add(optMedico.get());
+                    }
+                }
+            }
+            if(!pacienteDTO.getCitasId().isEmpty()){
+                for (Long id : pacienteDTO.getCitasId()) {
+                    Optional<Cita> optCita = citaRepo.findById(id);
+                    if(optCita.isPresent()){
+                        citas.add(optCita.get());
+                    }
+                }
+            }
+
+            Paciente paciente = PacienteMapper.INSTANCE.pacienteDTOToPaciente(pacienteDTO, medicos, citas);
             pacienteRepo.save(paciente);
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
@@ -105,7 +140,34 @@ public class PacienteService {
                          min. 1 mayuscula.\s
                          min. 8 caracteres.""");
             }
-            Paciente paciente = PacienteMapper.INSTANCE.pacienteDTOToPaciente(pacienteDTO);
+
+            ArrayList<Cita> citas = new ArrayList<>();
+            ArrayList<Medico> medicos = new ArrayList<>();
+
+            if (pacienteDTO.getCitasId() == null){
+                pacienteDTO.setCitasId(new ArrayList<>());
+            }
+            if (pacienteDTO.getMedicosId() == null){
+                pacienteDTO.setMedicosId(new ArrayList<>());
+            }
+
+            if(!pacienteDTO.getMedicosId().isEmpty()){
+                for (Long ident : pacienteDTO.getMedicosId()) {
+                    Optional<Medico> optMedico= medicoRepo.findById(ident);
+                    if(optMedico.isPresent()){
+                        medicos.add(optMedico.get());
+                    }
+                }
+            }
+            if(!pacienteDTO.getCitasId().isEmpty()){
+                for (Long ident : pacienteDTO.getCitasId()) {
+                    Optional<Cita> optCita = citaRepo.findById(ident);
+                    if(optCita.isPresent()){
+                        citas.add(optCita.get());
+                    }
+                }
+            }
+            Paciente paciente = PacienteMapper.INSTANCE.pacienteDTOToPaciente(pacienteDTO, medicos, citas);
             paciente.setId(id);
             pacienteRepo.save(paciente);
         } catch (Exception e){

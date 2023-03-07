@@ -1,5 +1,7 @@
 package com.metaenlace.formacion.gestormedico.services;
 
+import com.metaenlace.formacion.gestormedico.entities.Cita;
+import com.metaenlace.formacion.gestormedico.entities.Paciente;
 import com.metaenlace.formacion.gestormedico.exceptions.BadFormatException;
 import com.metaenlace.formacion.gestormedico.mapper.MedicoMapper;
 import com.metaenlace.formacion.gestormedico.dto.MedicoDTO;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -79,7 +82,36 @@ public class MedicoService {
                          min. 8 caracteres.""");
             }
 
-            Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO);
+            ArrayList<Cita> citas = new ArrayList<>();
+            ArrayList<Paciente> pacientes = new ArrayList<>();
+
+            if (medicoDTO.getCitasId() == null){
+                medicoDTO.setCitasId(new ArrayList<>());
+            }
+            if (medicoDTO.getPacientesId() == null){
+                medicoDTO.setPacientesId(new ArrayList<>());
+            }
+
+            if(!medicoDTO.getPacientesId().isEmpty()){
+                for (Long id : medicoDTO.getPacientesId()) {
+                    Optional<Paciente> optPaciente= pacienteRepo.findById(id);
+                    if(optPaciente.isPresent()){
+                        pacientes.add(optPaciente.get());
+                    }
+                }
+            }
+
+            if(!medicoDTO.getCitasId().isEmpty()){
+                for (Long id : medicoDTO.getCitasId()) {
+                    Optional<Cita> optCita = citaRepo.findById(id);
+                    if(optCita.isPresent()){
+                        citas.add(optCita.get());
+                    }
+                }
+            }
+
+            Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO, pacientes, citas);
+
             medicoRepo.save(medico);
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
@@ -99,9 +131,39 @@ public class MedicoService {
                          min. 1 mayuscula.\s
                          min. 8 caracteres.""");
             }
-            Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO);
+
+            ArrayList<Cita> citas = new ArrayList<>();
+            ArrayList<Paciente> pacientes = new ArrayList<>();
+
+            if (medicoDTO.getCitasId() == null){
+                medicoDTO.setCitasId(new ArrayList<>());
+            }
+            if (medicoDTO.getPacientesId() == null){
+                medicoDTO.setPacientesId(new ArrayList<>());
+            }
+
+            if(!medicoDTO.getPacientesId().isEmpty()){
+                for (Long ident : medicoDTO.getPacientesId()) {
+                    Optional<Paciente> optPaciente= pacienteRepo.findById(ident);
+                    if(optPaciente.isPresent()){
+                        pacientes.add(optPaciente.get());
+                    }
+                }
+            }
+
+            if(!medicoDTO.getCitasId().isEmpty()){
+                for (Long ident : medicoDTO.getCitasId()) {
+                    Optional<Cita> optCita = citaRepo.findById(ident);
+                    if(optCita.isPresent()){
+                        citas.add(optCita.get());
+                    }
+                }
+            }
+
+            Medico medico = MedicoMapper.INSTANCE.medicoDTOToMedico(medicoDTO, pacientes, citas);
             medico.setId(id);
             medicoRepo.save(medico);
+
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }

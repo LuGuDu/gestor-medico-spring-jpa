@@ -23,9 +23,9 @@ public class Paciente extends Usuario {
 	@Column(name = "direccion")
 	private String direccion;
 
-	@ManyToMany(cascade = { CascadeType.ALL})
+	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(
-			name = "paciente_medicos",
+			name = "medicos_paciente",
 			joinColumns = { @JoinColumn(name = "paciente_id")},
 			inverseJoinColumns = { @JoinColumn(name = "medico_id")}
 	)
