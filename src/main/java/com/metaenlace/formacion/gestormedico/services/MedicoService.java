@@ -12,7 +12,6 @@ import com.metaenlace.formacion.gestormedico.repositories.MedicoRepository;
 import com.metaenlace.formacion.gestormedico.repositories.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -170,5 +169,14 @@ public class MedicoService {
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
+    }
+
+    public Optional<MedicoDTO> findByUsuario(String usuario) {
+        Optional<Medico> medico = medicoRepo.findByUsuario(usuario);
+        if (medico.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(MedicoMapper.INSTANCE.medicoToMedicoDTO(medico.get()));
     }
 }
