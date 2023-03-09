@@ -178,4 +178,13 @@ public class PacienteService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
+
+    public Optional<PacienteDTO> findByUsuario(String usuario) {
+        Optional<Paciente> paciente = pacienteRepo.findByUsuario(usuario);
+        if (paciente.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(PacienteMapper.INSTANCE.pacienteToPacienteDTO(paciente.get()));
+    }
 }
