@@ -52,7 +52,10 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/login").permitAll()
-                .requestMatchers("/cita/**").hasRole("MEDICO")//esto hay que cambiarlo
+                .requestMatchers("/cita/**").hasAnyRole("PACIENTE", "MEDICO")
+                .requestMatchers("/medico/**").hasRole("MEDICO")
+                .requestMatchers("/paciente/**").hasRole("MEDICO")
+                .requestMatchers("/diagnostico/**").hasRole("MEDICO")
                 .and()
                 .userDetailsService(usuarioDetailsService)
                 .exceptionHandling()
