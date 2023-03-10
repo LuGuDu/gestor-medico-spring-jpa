@@ -1,0 +1,495 @@
+openapi: 3.0.3
+info:
+    title: Gestor Médico - Formación Metaenlace - OpenAPI 3.0
+    description: El gestor médico es una API REST propuesta por la empresa Metaenlace
+      durante el periodo de formación, de manera que, utilizando las tecnologías de Spring y JPA
+      se pueda conseguir la gestión lógica correspondiente a la parte backend de un servidor cuya 
+      finalidad es la gestión de un centro médico.
+
+
+      Este documento se corresponde a la especificación de la API REST a implementar. De esta manera
+      se fomenta el seguimiento de una _metodología API First_ en la que se desarrolla primeramente 
+      este documento de especificación OAS. Más adelante, gracias a plugins de Maven, se autogenerará
+      el código que facilitará la implementación de las funcionalidades de la API.
+    
+
+    termsOfService: http://swagger.io/terms/
+    contact:
+      email: lucasgutierrezd@hotmail.com
+    license:
+      name: Apache 2.0
+      url: http://www.apache.org/licenses/LICENSE-2.0.html
+    version: 1.0.11
+
+
+servers:
+  - url: http://localhost:8080/
+
+tags:
+  - name: Medicos
+    description: Todo lo relacionado con los medicos
+  - name: Pacientes
+    description: Todo lo relacionado con los pacinetes
+  - name: Citas
+    description: Todo lo relacionado con las citas
+  - name: Diagnosticos
+    description: Todo lo relacionado con los diagnosticos
+
+paths:
+  /medico/todos:
+    get:
+      tags:
+        - Medicos
+      summary: Recuperar todos los medicos
+      operationId: getAllMedicos
+      responses:
+        '200':
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Medico'     
+  /medico: 
+    post:
+      tags:
+        - Medicos
+      summary: Crear un nuevo medico
+      requestBody:
+        description: Crear un nuevo medico
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Medico'
+        required: true
+          
+      responses:
+        '200':
+          description: Operacion exitosa
+
+  /medico/{id}:
+    get:
+      tags:
+        - Medicos
+      summary: Recuperar un medico por id
+      parameters:
+        - name: id
+          in: path
+          description: ID del medico a borrar
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Medico'        
+    put:
+      tags:
+        - Medicos
+      summary: Actualizar un medico existente
+      parameters:
+        - name: id
+          in: path
+          description: ID del medico a actualizar
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: Actualizar un medico existente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Medico'
+        required: true
+      responses:
+        '200':
+          description: Operacion exitosa
+
+    delete:
+      tags:
+        - Medicos
+      summary: Borrar un medico por id
+      parameters:
+        - name: id
+          in: path
+          description: ID del medico a borrar
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Operacion exitosa
+
+  /paciente/todos:
+    get:
+      tags:
+        - Pacientes
+      summary: Recuperar todos los pacientes
+      operationId: getAllPacientes
+      responses:
+        '200':
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Paciente'     
+  /paciente: 
+    post:
+      tags:
+        - Pacientes
+      summary: Crear un nuevo paciente
+      requestBody:
+        description: Crear un nuevo paciente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Paciente'
+        required: true
+          
+      responses:
+        '200':
+          description: Operacion exitosa
+
+  /paciente/{id}:
+    get:
+      tags:
+        - Pacientes
+      summary: Recuperar un paciente por id
+      parameters:
+        - name: id
+          in: path
+          description: ID del paciente a borrar
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paciente'        
+    put:
+      tags:
+        - Pacientes
+      summary: Actualizar un paciente existente
+      parameters:
+        - name: id
+          in: path
+          description: ID del paciente a actualizar
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: Actualizar un paciente existente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Paciente'
+        required: true
+      responses:
+        '200':
+          description: Operacion exitosa
+
+    delete:
+      tags:
+        - Pacientes
+      summary: Borrar un paciente por id
+      parameters:
+        - name: id
+          in: path
+          description: ID del paciente a borrar
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Operacion exitosa
+
+  /cita/todos:
+    get:
+      tags:
+        - Citas
+      summary: Recuperar todas las citas
+      operationId: getAllCitas
+      responses:
+        '200':
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cita'     
+  /cita: 
+    post:
+      tags:
+        - Citas
+      summary: Crear una nueva cita
+      requestBody:
+        description: Crear una nueva cita
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cita'
+        required: true
+          
+      responses:
+        '200':
+          description: Operacion exitosa
+
+  /cita/{id}:
+    get:
+      tags:
+        - Citas
+      summary: Recuperar una cita por id
+      parameters:
+        - name: id
+          in: path
+          description: ID de la cita a borrar
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cita'        
+    put:
+      tags:
+        - Citas
+      summary: Actualizar una cita existente
+      parameters:
+        - name: id
+          in: path
+          description: ID de la cita a actualizar
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: Actualizar una cita existente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cita'
+        required: true
+      responses:
+        '200':
+          description: Operacion exitosa
+
+    delete:
+      tags:
+        - Citas
+      summary: Borrar una cita por id
+      parameters:
+        - name: id
+          in: path
+          description: ID de la cita a borrar
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Operacion exitosa
+
+  /diagnostico/todos:
+    get:
+      tags:
+        - Diagnosticos
+      summary: Recuperar todos los diagnosticos
+      operationId: getAllDiagnosticos
+      responses:
+        '200':
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Diagnostico'     
+  /diagnostico: 
+    post:
+      tags:
+        - Diagnosticos
+      summary: Crear un nuevo diagnostico
+      requestBody:
+        description: Crear un nuevo diagnostico
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Diagnostico'
+        required: true
+          
+      responses:
+        '200':
+          description: Operacion exitosa
+
+  /diagnostico/{id}:
+    get:
+      tags:
+        - Diagnosticos
+      summary: Recuperar un diagnostico por id
+      parameters:
+        - name: id
+          in: path
+          description: ID del diagnostico a borrar
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Diagnostico'        
+    put:
+      tags:
+        - Diagnosticos
+      summary: Actualizar un medico existente
+      parameters:
+        - name: id
+          in: path
+          description: ID del diagnostico a actualizar
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: Actualizar un diagnsotico existente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Diagnostico'
+        required: true
+      responses:
+        '200':
+          description: Operacion exitosa
+
+    delete:
+      tags:
+        - Diagnosticos
+      summary: Borrar un diagnsotico por id
+      parameters:
+        - name: id
+          in: path
+          description: ID del diagnsotico a borrar
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Operacion exitosa
+
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 100
+        nombre:
+          type: string
+          example: Juan
+        apellidos:
+          type: string
+          example: Rubio
+        usuario:
+          type: string
+          example: xungutron
+        clave:
+          type: string
+          example: octopus99
+
+    Medico:
+      allOf:
+        - $ref: '#/components/schemas/Usuario'
+        - type: object
+          properties:
+            numColegiado:
+              type: string
+              example: '123456789'
+            citas_id:
+              type: array
+              items:
+                type: number
+                example: '10'
+            pacientes_id:
+              type: array
+              items:
+                type: number
+                example: '10'
+
+    Paciente:
+      allOf:
+        - $ref: '#/components/schemas/Usuario'
+        - type: object
+          properties:
+            nSS:
+              type: string
+              example: 1234
+            numTarjeta:
+              type: string
+              example: 1234
+            telefono:
+              type: string
+              example: '678234588'
+            direccion:
+              type: string
+              example: 'Calle verde 85'
+            citas_id:
+              type: array
+              items:
+                type: number
+                example: '10'
+            medicos_id:
+              type: array
+              items:
+                type: number
+                example: '10'
+
+    Cita: 
+      type: object
+      properties:
+        id:
+          type: number
+          example: 100
+        fechaHora:
+          type: string
+          format: date-time              
+        motivoCita:
+          type: string
+          example: 'Dolor de barriga'
+        paciente_id:
+          type: number
+          example: 10
+        medico_id:
+          type: number
+          example: 10
+        diagnostico_id:
+          type: number
+          example: 10
+    
+    Diagnostico: 
+      type: object
+      properties:
+        id:
+          type: number
+          example: 100
+        valoracion:
+          type: string
+          example: 'Mala pinta...'              
+        enfermedad:
+          type: string
+          example: 'Gastrointeritis'
+        cita_id:
+          type: number
+          example: 10
